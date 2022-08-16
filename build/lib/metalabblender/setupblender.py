@@ -30,7 +30,9 @@ blender_url_dict = {'2.70'    : "https://ftp.nluug.nl/pub/graphics/blender/relea
                     '3.1.0'   : "https://ftp.nluug.nl/pub/graphics/blender/release/Blender3.1/blender-3.1.0-linux-x64.tar.xz",
                     '3.1.1'   : "https://ftp.nluug.nl/pub/graphics/blender/release/Blender3.1/blender-3.1.1-linux-x64.tar.xz",
                     '3.1.2'   : "https://ftp.nluug.nl/pub/graphics/blender/release/Blender3.1/blender-3.1.2-linux-x64.tar.xz",
-                    '3.2.0'     : "https://ftp.nluug.nl/pub/graphics/blender/release/Blender3.2/blender-3.2.0-linux-x64.tar.xz"}
+                    '3.2.0'     : "https://ftp.nluug.nl/pub/graphics/blender/release/Blender3.2/blender-3.2.0-linux-x64.tar.xz",
+                    '3.2.1'     : "https://ftp.nluug.nl/pub/graphics/blender/release/Blender3.2/blender-3.2.1-linux-x64.tar.xz",
+                    '3.2.2'     : "https://ftp.nluug.nl/pub/graphics/blender/release/Blender3.2/blender-3.2.2-linux-x64.tar.xz"}
 
 def setup(blenderVersionOrUrl , isBlenderUrl):
     blender_url = None
