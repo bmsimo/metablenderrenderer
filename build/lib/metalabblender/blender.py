@@ -65,7 +65,7 @@ class Blender:
 
     def render(self):
         print("starting to process blender...")
-        blender_binary = './'+self.blenderInstallPath+"/blender"
+        blender_binary = '/'+self.blenderInstallPath+"/blender"
         if (self.animation):
             if self.startFrame == self.endFrame:
                 args = [blender_binary,
