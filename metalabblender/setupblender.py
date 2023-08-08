@@ -57,12 +57,24 @@ def setup(blenderVersionOrUrl, isBlenderUrl):
         shutil.copy2(blender_url, os.path.expanduser("~"))
         subprocess.run(["tar", "xf", base_url], cwd=os.path.expanduser("~"), encoding="utf-8",
                        stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+        subprocess.run(["wait"], cwd=os.path.expanduser("~"), encoding="utf-8",
+                       stdout=subprocess.PIPE, stderr=subprocess.PIPE)
         print("Blender installed..." + blenderVersion)
 
         # Print the path of the blender executable
-        print(base_url)
+        blender_executable = os.path.join(os.path.expanduser(
+            "~"), base_url.replace(".tar.xz", ""), "blender")
+        print(blender_executable)
 
-        return base_url.replace(".tar.xz", "")
+        return blender_executable
+        print("Blender installed..." + blenderVersion)
+
+        # Print the path of the blender executable
+        blender_executable = os.path.join(os.path.expanduser(
+            "~"), base_url.replace(".tar.xz", ""), "blender")
+        print(blender_executable)
+
+        return blender_executable
     except subprocess.CalledProcessError as e:
         print("Something went wrong..... Blender library installtion failed.....")
         print(e.output)
