@@ -116,15 +116,20 @@ class Blender:
             python_expr = "--python-expr \"import bpy; bpy.context.scene.render.resolution_x = {self.resolution_x}; bpy.context.scene.render.resolution_y = {self.resolution_y};bpy.context.scene.render.image_settings.color_mode = 'RGBA';bpy.context.scene.render.image_settings.color_depth = '8';bpy.context.scene.render.image_settings.compression = {self.compressionLevel}\""
             args.extend([python_expr])
 
-        try:
-            print(' '.join(args))
-            process = subprocess.Popen(args, stdout=subprocess.PIPE)
-            while process.poll() is None:
-                l = process.stdout.readline()
-                if (self.logEnable == True):
-                    print(l)
-            print(process.stdout.read())
-            print("Blender Completed...............................................")
-        except subprocess.CalledProcessError as e:
-            print("Something went wrong..... Blender file did not executed.....")
-            print(e.output)
+            print(self.resolution_x)
+            print(self.resolution_y)
+            print(self.compressionLevel)
+            print(args)
+
+    # try:
+    #     print(' '.join(args))
+    #     process = subprocess.Popen(args, stdout=subprocess.PIPE)
+    #     while process.poll() is None:
+    #         l = process.stdout.readline()
+    #         if (self.logEnable == True):
+    #             print(l)
+    #     print(process.stdout.read())
+    #     print("Blender Completed...............................................")
+    # except subprocess.CalledProcessError as e:
+    #     print("Something went wrong..... Blender file did not executed.....")
+    #     print(e.output)
