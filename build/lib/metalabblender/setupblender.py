@@ -1,30 +1,66 @@
+import shutil
 import os
 import subprocess
 
-blender_url_dict = {'3.2.2': "https://ftp.nluug.nl/pub/graphics/blender/release/Blender3.2/blender-3.2.2-linux-x64.tar.xz",
+blender_url_dict = {'2.70': "https://ftp.nluug.nl/pub/graphics/blender/release/Blender2.70/blender-2.70-linux-glibc211-x86_64.tar.bz2",
+                    '2.70a': "https://ftp.nluug.nl/pub/graphics/blender/release/Blender2.70/blender-2.70a-linux-glibc211-x86_64.tar.bz2",
+                    '2.71': "https://ftp.nluug.nl/pub/graphics/blender/release/Blender2.71/blender-2.71-linux-glibc211-x86_64.tar.bz2",
+                    '2.72': "https://ftp.nluug.nl/pub/graphics/blender/release/Blender2.72/blender-2.72-linux-glibc211-x86_64.tar.bz2",
+                    '2.72a': "https://ftp.nluug.nl/pub/graphics/blender/release/Blender2.72/blender-2.72a-linux-glibc211-x86_64.tar.bz2",
+                    '2.72b': "https://ftp.nluug.nl/pub/graphics/blender/release/Blender2.72/blender-2.72b-linux-glibc211-x86_64.tar.bz2",
+                    '2.73': "https://ftp.nluug.nl/pub/graphics/blender/release/Blender2.73/blender-2.73-linux-glibc211-x86_64.tar.bz2",
+                    '2.74': "https://ftp.nluug.nl/pub/graphics/blender/release/Blender2.74/blender-2.74-linux-glibc211-x86_64.tar.bz2",
+                    '2.75': "https://ftp.nluug.nl/pub/graphics/blender/release/Blender2.75/blender-2.75-linux-glibc211-x86_64.tar.bz2",
+                    '2.75a': "https://ftp.nluug.nl/pub/graphics/blender/release/Blender2.75/blender-2.75a-linux-glibc211-x86_64.tar.bz2",
+                    '2.76': "https://ftp.nluug.nl/pub/graphics/blender/release/Blender2.76/blender-2.76-linux-glibc211-x86_64.tar.bz2",
+                    '2.76b': "https://ftp.nluug.nl/pub/graphics/blender/release/Blender2.76/blender-2.76b-linux-glibc211-x86_64.tar.bz2",
+                    '2.77': "https://ftp.nluug.nl/pub/graphics/blender/release/Blender2.77/blender-2.77-linux-glibc211-x86_64.tar.bz2",
+                    '2.78': "https://ftp.nluug.nl/pub/graphics/blender/release/Blender2.78/blender-2.78-linux-glibc211-x86_64.tar.bz2",
+                    '2.78c': "https://ftp.nluug.nl/pub/graphics/blender/release/Blender2.78/blender-2.78c-linux-glibc219-x86_64.tar.bz2",
+                    '2.79': "https://ftp.nluug.nl/pub/graphics/blender/release/Blender2.79/blender-2.79-linux-glibc219-x86_64.tar.bz2",
+                    '2.79b': "https://ftp.nluug.nl/pub/graphics/blender/release/Blender2.79/blender-2.79b-linux-glibc219-x86_64.tar.bz2",
+                    '2.80rc3': "https://ftp.nluug.nl/pub/graphics/blender/release/Blender2.80/blender-2.80rc3-linux-glibc217-x86_64.tar.bz2",
+                    '2.81a': "https://ftp.nluug.nl/pub/graphics/blender/release/Blender2.81/blender-2.81a-linux-glibc217-x86_64.tar.bz2",
+                    '2.82a': "https://ftp.nluug.nl/pub/graphics/blender/release/Blender2.82/blender-2.82a-linux64.tar.xz",
+                    '2.83.19': "https://ftp.nluug.nl/pub/graphics/blender/release/Blender2.83/blender-2.83.19-linux-x64.tar.xz",
+                    '2.90.1': "https://ftp.nluug.nl/pub/graphics/blender/release/Blender2.90/blender-2.90.1-linux64.tar.xz",
+                    '2.91.2': "https://ftp.nluug.nl/pub/graphics/blender/release/Blender2.91/blender-2.91.2-linux64.tar.xz",
+                    '2.92.0': "https://ftp.nluug.nl/pub/graphics/blender/release/Blender2.92/blender-2.92.0-linux64.tar.xz",
+                    '2.93.8': "https://ftp.nluug.nl/pub/graphics/blender/release/Blender2.93/blender-2.93.8-linux-x64.tar.xz",
+                    '3.0.1': "https://ftp.nluug.nl/pub/graphics/blender/release/Blender3.0/blender-3.0.1-linux-x64.tar.xz",
+                    '3.1.0': "https://ftp.nluug.nl/pub/graphics/blender/release/Blender3.1/blender-3.1.0-linux-x64.tar.xz",
+                    '3.1.1': "https://ftp.nluug.nl/pub/graphics/blender/release/Blender3.1/blender-3.1.1-linux-x64.tar.xz",
+                    '3.1.2': "https://ftp.nluug.nl/pub/graphics/blender/release/Blender3.1/blender-3.1.2-linux-x64.tar.xz",
+                    '3.2.0': "https://ftp.nluug.nl/pub/graphics/blender/release/Blender3.2/blender-3.2.0-linux-x64.tar.xz",
+                    '3.2.1': "https://ftp.nluug.nl/pub/graphics/blender/release/Blender3.2/blender-3.2.1-linux-x64.tar.xz",
+                    '3.2.2': "https://ftp.nluug.nl/pub/graphics/blender/release/Blender3.2/blender-3.2.2-linux-x64.tar.xz",
+                    '3.3.0': "https://download.blender.org/release/Blender3.3/blender-3.3.0-linux-x64.tar.xz",
                     '3.6.1': "https://download.blender.org/release/Blender3.6/blender-3.6.1-linux-x64.tar.xz"
                     }
 
 
-def setup(blenderVersionOrPath, isBlenderPath):
-    blender_path = None
+def setup(blenderVersionOrUrl, isBlenderUrl):
+    blender_url = None
     blenderVersion = None
-    if (isBlenderPath == True):
-        blender_path = blenderVersionOrPath
-        blenderVersion = os.path.basename(blender_path)
+    if (isBlenderUrl == True):
+        blender_url = blenderVersionOrUrl
+        blenderVersion = blenderVersionOrUrl.rsplit('/', 1)[1]
     else:
-        blender_path = os.path.join(
-            '/gdrive/My Drive/blender/', blenderVersionOrPath)
-        blenderVersion = blenderVersionOrPath
+        blenderVersion = blenderVersionOrUrl
+        base_url = f"blender-{blenderVersion}-linux-x64.tar.xz"
+        blender_url = os.path.join("/gdrive/My Drive/blender", base_url)
+
+    base_url = os.path.basename(blender_url)
 
     try:
         print("Installing blender = " + blenderVersion)
-        subprocess.run(["tar", "xf", blender_path], encoding="utf-8",
+        shutil.copy2(blender_url, os.path.expanduser("~"))
+        subprocess.run(["tar", "xf", base_url], cwd=os.path.expanduser("~"), encoding="utf-8",
                        stdout=subprocess.PIPE, stderr=subprocess.PIPE)
         print("Blender installed..." + blenderVersion)
-        return os.path.splitext(blenderVersion)[0]
+        return base_url.replace(".tar.xz", "")
     except subprocess.CalledProcessError as e:
-        print("Something went wrong..... Blender library installation failed.....")
+        print("Something went wrong..... Blender library installtion failed.....")
         print(e.output)
 
 
