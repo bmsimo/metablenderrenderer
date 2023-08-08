@@ -56,7 +56,8 @@ class Blender:
         # Blender.set_renderer(self)
         Blender.gpu_setup()
         ldpreload.preload()
-        self.blenderInstallPath = 'gdrive/My Drive/blender-3.6.1-linux-x64'
+        self.blenderInstallPath = setupblender.setup(
+            self.blenderVersion, self.isBlenderUrl)
         if (self.isFileUrl == True):
             self.blenderFilePath = filedownload.download_from_url(
                 self.blenderFilePath)
@@ -65,7 +66,7 @@ class Blender:
 
     def render(self):
         print("starting to process blender...")
-        blender_binary = '/'+self.blenderInstallPath+"/blender"
+        blender_binary = './'+self.blenderInstallPath+"/blender"
         if (self.animation):
             if self.startFrame == self.endFrame:
                 args = [blender_binary,
