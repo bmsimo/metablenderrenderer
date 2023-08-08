@@ -22,9 +22,11 @@ class Blender:
     logEnable = None
     blenderInstallPath = None
     pythonExpression = None
+    resolution_x = None
+    resolution_y = None
 
     def __init__(self, blenderFilePath, isFileUrl, outputPath, blenderVersion, isBlenderUrl, fileFormat,
-                 renderEngine, startFrame, endFrame, renderer, animation, audio, logEnable, token, pythonExpression):
+                 renderEngine, startFrame, endFrame, renderer, animation, audio, logEnable, token, pythonExpression, resolution_x, resolution_y):
         self.token = token
         self.blenderFilePath = blenderFilePath
         self.isFileUrl = isFileUrl
@@ -40,6 +42,8 @@ class Blender:
         self.audio = audio
         self.logEnable = logEnable
         self.pythonExpression = pythonExpression
+        self.resolution_x = resolution_x
+        self.resolution_y = resolution_y
 
     def gpu_setup():
         gpu = subprocess.run(["nvidia-smi", "--query-gpu=gpu_name", "--format=csv,noheader"],
@@ -107,7 +111,9 @@ class Blender:
                 args.insert(6, "1")
 
         if self.pythonExpression:
-            python_expr = "--python-expr \"import bpy; bpy.context.scene.render.resolution_x = 720; bpy.context.scene.render.resolution_y = 1280;bpy.context.scene.render.image_settings.color_mode = 'RGBA';bpy.context.scene.render.image_settings.color_depth = '8';bpy.context.scene.render.image_settings.compression = 0\""
+            python_expr = "--python-expr \"import bpy; bpy.context.scene.render.resolution_x = {self.resolution_x}; bpy.context.scene.render.resolution_y = {self_resolution_y};bpy.context.scene.render.image_settings.color_mode = 'RGBA';bpy.context.scene.render.image_settings.color_depth = '8';bpy.context.scene.render.image_settings.compression = 0\""
+            print(self.resolution_x)
+            print(self.resolution_y)
             args.extend([python_expr])
 
         try:
