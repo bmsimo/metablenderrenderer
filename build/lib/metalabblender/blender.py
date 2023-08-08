@@ -21,12 +21,13 @@ class Blender:
     audio = None
     logEnable = None
     blenderInstallPath = None
-    # pythonExpression = None
-    resolutionX = None
-    resolutionY = None
+    pythonExpression = None
+    resolution_x = None
+    resolution_y = None
+    compressionLevel = None
 
     def __init__(self, blenderFilePath, isFileUrl, outputPath, blenderVersion, isBlenderUrl, fileFormat,
-                 renderEngine, startFrame, endFrame, renderer, animation, audio, logEnable, token, resolutionX, resolutionY):
+                 renderEngine, startFrame, endFrame, renderer, animation, audio, logEnable, token, pythonExpression, resolution_x, resolution_y, compressionLevel):
         self.token = token
         self.blenderFilePath = blenderFilePath
         self.isFileUrl = isFileUrl
@@ -41,8 +42,10 @@ class Blender:
         self.animation = animation
         self.audio = audio
         self.logEnable = logEnable
-        self.resolutionX = resolutionX
-        self.resolutionY = resolutionY
+        self.pythonExpression = pythonExpression
+        self.resolution_x = resolution_x
+        self.resolution_y = resolution_y
+        self.compressionLevel = compressionLevel
 
     def gpu_setup():
         gpu = subprocess.run(["nvidia-smi", "--query-gpu=gpu_name", "--format=csv,noheader"],
@@ -77,8 +80,6 @@ class Blender:
                         "-E", self.renderEngine,
                         "-o", self.outputPath,
                         "-F", self.fileFormat,
-                        "--resolution-x", str(self.resolutionX),
-                        "--resolution-y", str(self.resolutionY),
                         "-a", "--", "--cycles-device", self.renderer
                         ]
             else:
@@ -89,8 +90,6 @@ class Blender:
                         "-s", str(self.startFrame),
                         "-e", str(self.endFrame),
                         "-F", self.fileFormat,
-                        "--resolution-x", str(self.resolutionX),
-                        "--resolution-y", str(self.resolutionY),
                         "-a", "--", "--cycles-device", self.renderer
                         ]
         else:
@@ -100,8 +99,6 @@ class Blender:
                     "-o", self.outputPath,
                     "-F", self.fileFormat,
                     "-f", str(self.startFrame),
-                    "--resolution-x", str(self.resolutionX),
-                    "--resolution-y", str(self.resolutionY),
                     "--", "--cycles-device", self.renderer
                     ]
 
@@ -115,9 +112,9 @@ class Blender:
                 args.insert(5, "--log-level")
                 args.insert(6, "1")
 
-        # if self.pythonExpression:
-        #     python_expr = "--python-expr \"import bpy; bpy.context.scene.render.resolution_x = 720; bpy.context.scene.render.resolution_y = 1280;bpy.context.scene.render.image_settings.color_mode = 'RGBA';bpy.context.scene.render.image_settings.color_depth = '8';bpy.context.scene.render.image_settings.compression = 0\""
-        #     args.extend([python_expr])
+        if self.pythonExpression:
+            python_expr = "--python-expr \"import bpy; bpy.context.scene.render.resolution_x = {self.resolution_x}; bpy.context.scene.render.resolution_y = {self.resolution_y};bpy.context.scene.render.image_settings.color_mode = 'RGBA';bpy.context.scene.render.image_settings.color_depth = '8';bpy.context.scene.render.image_settings.compression = {self.compressionLevel}\""
+            args.extend([python_expr])
 
         try:
             print(' '.join(args))
