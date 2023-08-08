@@ -21,11 +21,10 @@ class Blender:
     audio = None
     logEnable = None
     blenderInstallPath = None
-    yResolution = None
-    xResolution = None
+    pythonExpression = None
 
     def __init__(self, blenderFilePath, isFileUrl, outputPath, blenderVersion, isBlenderUrl, fileFormat,
-                 renderEngine, startFrame, endFrame, renderer, animation, audio, logEnable, token, xResolution, yResolution):
+                 renderEngine, startFrame, endFrame, renderer, animation, audio, logEnable, token, pythonExpression):
         self.token = token
         self.blenderFilePath = blenderFilePath
         self.isFileUrl = isFileUrl
@@ -40,8 +39,7 @@ class Blender:
         self.animation = animation
         self.audio = audio
         self.logEnable = logEnable
-        self.xResolution = xResolution
-        self.yResolution = yResolution
+        self.pythonExpression = pythonExpression
 
     def gpu_setup():
         gpu = subprocess.run(["nvidia-smi", "--query-gpu=gpu_name", "--format=csv,noheader"],
@@ -77,8 +75,6 @@ class Blender:
                         "-o", self.outputPath,
                         "-F", self.fileFormat,
                         "-a", "--", "--cycles-device", self.renderer,
-                        "--resolution-x", self.xResolution,
-                        "--resolution-y", self.yResolution,
                         ]
             else:
                 args = [blender_binary,
@@ -89,9 +85,6 @@ class Blender:
                         "-e", str(self.endFrame),
                         "-F", self.fileFormat,
                         "-a", "--", "--cycles-device", self.renderer,
-                        "--resolution-x", self.xResolution,
-                        "--resolution-y", self.yResolution,
-
                         ]
         else:
             args = [blender_binary,
@@ -101,10 +94,9 @@ class Blender:
                     "-F", self.fileFormat,
                     "-f", str(self.startFrame),
                     "--", "--cycles-device", self.renderer,
-                    "--resolution-x", self.xResolution,
-                    "--resolution-y", self.yResolution,
-
                     ]
+        # if self.pythonExpression:
+        #     args += ["--python-expr", ]
 
         if (self.audio == False):
             args.insert(3, "-noaudio")
@@ -115,6 +107,10 @@ class Blender:
             if (self.logEnable == True):
                 args.insert(5, "--log-level")
                 args.insert(6, "1")
+
+        if self.pythonExpression:
+            python_expr = "--python-expr \"import bpy; bpy.context.scene.render.resolution_x = 720; bpy.context.scene.render.resolution_y = 1280;bpy.context.scene.render.image_settings.color_mode = 'RGBA';bpy.context.scene.render.image_settings.color_depth = '8';bpy.context.scene.render.image_settings.compression = 0\""
+            args.extend([python_expr])
 
         try:
             print(' '.join(args))
