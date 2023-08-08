@@ -58,6 +58,10 @@ def setup(blenderVersionOrUrl, isBlenderUrl):
         subprocess.run(["tar", "xf", base_url], cwd=os.path.expanduser("~"), encoding="utf-8",
                        stdout=subprocess.PIPE, stderr=subprocess.PIPE)
         print("Blender installed..." + blenderVersion)
+
+        # Print the path of the blender executable
+        print(base_url)
+
         return base_url.replace(".tar.xz", "")
     except subprocess.CalledProcessError as e:
         print("Something went wrong..... Blender library installtion failed.....")
