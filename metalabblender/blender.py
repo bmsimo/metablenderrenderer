@@ -22,11 +22,10 @@ class Blender:
     logEnable = None
     blenderInstallPath = None
     pythonExpression = None
-    resolution_x = None
-    resolution_y = None
+    size: None
 
     def __init__(self, blenderFilePath, isFileUrl, outputPath, blenderVersion, isBlenderUrl, fileFormat,
-                 renderEngine, startFrame, endFrame, renderer, animation, audio, logEnable, token, pythonExpression, resolution_x, resolution_y):
+                 renderEngine, startFrame, endFrame, renderer, animation, audio, logEnable, token, pythonExpression, size):
         self.token = token
         self.blenderFilePath = blenderFilePath
         self.isFileUrl = isFileUrl
@@ -42,8 +41,7 @@ class Blender:
         self.audio = audio
         self.logEnable = logEnable
         self.pythonExpression = pythonExpression
-        self.resolution_x = resolution_x
-        self.resolution_y = resolution_y
+        self.size = size
 
     def gpu_setup():
         gpu = subprocess.run(["nvidia-smi", "--query-gpu=gpu_name", "--format=csv,noheader"],
@@ -111,10 +109,20 @@ class Blender:
                 args.insert(6, "1")
 
         if self.pythonExpression:
-            python_expr = "--python-expr \"import bpy; bpy.context.scene.render.resolution_x = {self.resolution_x}; bpy.context.scene.render.resolution_y = {self_resolution_y};bpy.context.scene.render.image_settings.color_mode = 'RGBA';bpy.context.scene.render.image_settings.color_depth = '8';bpy.context.scene.render.image_settings.compression = 0\""
-            print(self.resolution_x)
-            print(self.resolution_y)
-            args.extend([python_expr])
+            size_expr_mapping = {
+                "small": "--python-expr \"import bpy; bpy.context.scene.render.resolution_x = 480; bpy.context.scene.render.resolution_y = 270;bpy.context.scene.render.image_settings.color_mode = 'RGBA';bpy.context.scene.render.image_settings.color_depth = '8';bpy.context.scene.render.image_settings.compression = 0\"",
+                "medium": "--python-expr \"import bpy; bpy.context.scene.render.resolution_x = 960; bpy.context.scene.render.resolution_y = 560;bpy.context.scene.render.image_settings.color_mode = 'RGBA';bpy.context.scene.render.image_settings.color_depth = '8';bpy.context.scene.render.image_settings.compression = 0\"",
+                "high": "--python-expr \"import bpy; bpy.context.scene.render.resolution_x = 1920; bpy.context.scene.render.resolution_y = 1120;bpy.context.scene.render.image_settings.color_mode = 'RGBA';bpy.context.scene.render.image_settings.color_depth = '8';bpy.context.scene.render.image_settings.compression = 0\"",
+            }
+
+            # Check if the size is in the mapping, and get the corresponding python_expr
+            if self.size in size_expr_mapping:
+                python_expr = size_expr_mapping[self.size]
+                print("Size X: " + self.resolution_x)
+                print("Size Y: " + self.resolution_y)
+                args.extend([python_expr])
+            else:
+                print("Unknown size:", self.size)
 
         try:
             print(' '.join(args))
