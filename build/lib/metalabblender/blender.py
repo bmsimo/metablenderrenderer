@@ -22,7 +22,7 @@ class Blender:
     logEnable = None
     blenderInstallPath = None
     pythonExpression = None
-    size: None
+    size = None
 
     def __init__(self, blenderFilePath, isFileUrl, outputPath, blenderVersion, isBlenderUrl, fileFormat,
                  renderEngine, startFrame, endFrame, renderer, animation, audio, logEnable, token, pythonExpression, size):
@@ -58,8 +58,14 @@ class Blender:
         # Blender.set_renderer(self)
         Blender.gpu_setup()
         ldpreload.preload()
-        self.blenderInstallPath = setupblender.setup(
-            self.blenderVersion, self.isBlenderUrl)
+
+        # Check if blender binary is already installed
+        blender_binary = './'+self.blenderInstallPath+"/blender"
+        if os.path.isfile(blender_binary):
+            print("Blender binary already installed")
+        else:
+            self.blenderInstallPath = setupblender.setup(
+                self.blenderVersion, self.isBlenderUrl)
         if (self.isFileUrl == True):
             self.blenderFilePath = filedownload.download_from_url(
                 self.blenderFilePath)
