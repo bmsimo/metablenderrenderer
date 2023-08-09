@@ -73,29 +73,31 @@ class Blender:
             if self.startFrame == self.endFrame:
                 args = [blender_binary,
                         "-b", self.blenderFilePath,
+                        "--cycles-device", self.renderer,
                         "-E", self.renderEngine,
                         "-o", self.outputPath,
                         "-F", self.fileFormat,
-                        "-a", "--", "--cycles-device", self.renderer
+                        "-a"
                         ]
             else:
                 args = [blender_binary,
                         "-b", self.blenderFilePath,
+                        "--cycles-device", self.renderer,
                         "-E", self.renderEngine,
                         "-o", self.outputPath,
                         "-s", str(self.startFrame),
                         "-e", str(self.endFrame),
                         "-F", self.fileFormat,
-                        "-a", "--", "--cycles-device", self.renderer
+                        "-a"
                         ]
         else:
             args = [blender_binary,
                     "-b", self.blenderFilePath,
+                    "--cycles-device", self.renderer,
                     "-E", self.renderEngine,
                     "-o", self.outputPath,
-                    "-F", self.fileFormat,
                     "-f", str(self.startFrame),
-                    "--", "--cycles-device", self.renderer
+                    "-F", self.fileFormat
                     ]
 
         if (self.audio == False):
@@ -118,7 +120,7 @@ class Blender:
             # Check if the size is in the mapping, and get the corresponding python_expr
             if self.size in size_expr_mapping:
                 python_expr = size_expr_mapping[self.size]
-                args.extend([python_expr])
+                args.insert(2, python_expr)
             else:
                 print("Unknown size:", self.size)
 

@@ -53,18 +53,22 @@ def setup(blenderVersionOrUrl, isBlenderUrl):
     base_url = os.path.basename(blender_url)
 
     try:
+        # Check if the binary file already exists
+        if os.path.exists(os.path.join("/content", base_url.replace(".tar.xz", ""))):
+            print("Blender binary already exists...")
+            return base_url.replace(".tar.xz", "")
+
         print("Installing blender = " + blenderVersion)
         print("blender_url = " + blender_url)
         print("base_url = " + base_url)
-        # shutil.copy2(blender_url, os.path.expanduser("/content"))
 
+        # Copy the binary file to the content folder
         subprocess.run(['cp', blender_url, '/content/'], encoding="utf-8",
                        stdout=subprocess.PIPE, stderr=subprocess.PIPE)
 
-        print("copied blender to content folder")
-        # subprocess.run(["tar", "xf", base_url], cwd=os.path.expanduser("~"), encoding="utf-8",
-        #                stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+        print("Copied blender to content folder")
 
+        # Extract the binary file
         subprocess.run(["tar", "xf", base_url], encoding="utf-8",
                        stdout=subprocess.PIPE, stderr=subprocess.PIPE)
 
@@ -72,7 +76,7 @@ def setup(blenderVersionOrUrl, isBlenderUrl):
 
         return base_url.replace(".tar.xz", "")
     except subprocess.CalledProcessError as e:
-        print("Something went wrong..... Blender library installtion failed.....")
+        print("Something went wrong..... Blender library installation failed.....")
         print(e.output)
 
 
