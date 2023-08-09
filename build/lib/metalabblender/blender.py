@@ -120,7 +120,7 @@ class Blender:
             # Check if the size is in the mapping, and get the corresponding python_expr
             if self.size in size_expr_mapping:
                 python_expr = size_expr_mapping[self.size]
-                args.insert(2, python_expr)
+                args.insert(3, python_expr)
             else:
                 print("Unknown size:", self.size)
 
