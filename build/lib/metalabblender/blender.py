@@ -71,9 +71,9 @@ class Blender:
         blender_binary = './'+self.blenderInstallPath+"/blender"
 
         size_expr_mapping = {
-            "small": "--python-expr \"import bpy; bpy.context.scene.render.resolution_x = 480; bpy.context.scene.render.resolution_y = 270;bpy.context.scene.render.image_settings.color_mode = 'RGBA';bpy.context.scene.render.image_settings.color_depth = '8';bpy.context.scene.render.image_settings.compression = 0\"",
-            "medium": "--python-expr \"import bpy; bpy.context.scene.render.resolution_x = 960; bpy.context.scene.render.resolution_y = 560;bpy.context.scene.render.image_settings.color_mode = 'RGBA';bpy.context.scene.render.image_settings.color_depth = '8';bpy.context.scene.render.image_settings.compression = 0\"",
-            "high": "--python-expr \"import bpy; bpy.context.scene.render.resolution_x = 1920; bpy.context.scene.render.resolution_y = 1120;bpy.context.scene.render.image_settings.color_mode = 'RGBA';bpy.context.scene.render.image_settings.color_depth = '8';bpy.context.scene.render.image_settings.compression = 0\"",
+            "small":  "\"import bpy; bpy.context.scene.render.resolution_x = 480; bpy.context.scene.render.resolution_y = 270;bpy.context.scene.render.image_settings.color_mode = 'RGBA';bpy.context.scene.render.image_settings.color_depth = '8';bpy.context.scene.render.image_settings.compression = 0\"",
+            "medium": "\"import bpy; bpy.context.scene.render.resolution_x = 960; bpy.context.scene.render.resolution_y = 560;bpy.context.scene.render.image_settings.color_mode = 'RGBA';bpy.context.scene.render.image_settings.color_depth = '8';bpy.context.scene.render.image_settings.compression = 0\"",
+            "high":   "\"import bpy; bpy.context.scene.render.resolution_x = 1920; bpy.context.scene.render.resolution_y = 1120;bpy.context.scene.render.image_settings.color_mode = 'RGBA';bpy.context.scene.render.image_settings.color_depth = '8';bpy.context.scene.render.image_settings.compression = 0\"",
         }
 
         # Check if the size is in the mapping, and get the corresponding python_expr
