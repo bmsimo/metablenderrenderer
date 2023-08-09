@@ -69,10 +69,23 @@ class Blender:
     def render(self):
         print("starting to process blender...")
         blender_binary = './'+self.blenderInstallPath+"/blender"
+
+        size_expr_mapping = {
+            "small": "--python-expr \"import bpy; bpy.context.scene.render.resolution_x = 480; bpy.context.scene.render.resolution_y = 270;bpy.context.scene.render.image_settings.color_mode = 'RGBA';bpy.context.scene.render.image_settings.color_depth = '8';bpy.context.scene.render.image_settings.compression = 0\"",
+            "medium": "--python-expr \"import bpy; bpy.context.scene.render.resolution_x = 960; bpy.context.scene.render.resolution_y = 560;bpy.context.scene.render.image_settings.color_mode = 'RGBA';bpy.context.scene.render.image_settings.color_depth = '8';bpy.context.scene.render.image_settings.compression = 0\"",
+            "high": "--python-expr \"import bpy; bpy.context.scene.render.resolution_x = 1920; bpy.context.scene.render.resolution_y = 1120;bpy.context.scene.render.image_settings.color_mode = 'RGBA';bpy.context.scene.render.image_settings.color_depth = '8';bpy.context.scene.render.image_settings.compression = 0\"",
+        }
+
+        # Check if the size is in the mapping, and get the corresponding python_expr
+        if self.size in size_expr_mapping:
+            python_expr = size_expr_mapping[self.size]
+
         if (self.animation):
             if self.startFrame == self.endFrame:
                 args = [blender_binary,
                         "-b", self.blenderFilePath,
+                        "--python-expr",
+                        python_expr,
                         "--cycles-device", self.renderer,
                         "-E", self.renderEngine,
                         "-o", self.outputPath,
@@ -82,6 +95,8 @@ class Blender:
             else:
                 args = [blender_binary,
                         "-b", self.blenderFilePath,
+                        "--python-expr",
+                        python_expr,
                         "--cycles-device", self.renderer,
                         "-E", self.renderEngine,
                         "-o", self.outputPath,
@@ -93,6 +108,8 @@ class Blender:
         else:
             args = [blender_binary,
                     "-b", self.blenderFilePath,
+                    "--python-expr",
+                    python_expr,
                     "--cycles-device", self.renderer,
                     "-E", self.renderEngine,
                     "-o", self.outputPath,
@@ -109,20 +126,6 @@ class Blender:
             if (self.logEnable == True):
                 args.insert(5, "--log-level")
                 args.insert(6, "1")
-
-        if self.pythonExpression:
-            size_expr_mapping = {
-                "small": "--python-expr \"import bpy; bpy.context.scene.render.resolution_x = 480; bpy.context.scene.render.resolution_y = 270;bpy.context.scene.render.image_settings.color_mode = 'RGBA';bpy.context.scene.render.image_settings.color_depth = '8';bpy.context.scene.render.image_settings.compression = 0\"",
-                "medium": "--python-expr \"import bpy; bpy.context.scene.render.resolution_x = 960; bpy.context.scene.render.resolution_y = 560;bpy.context.scene.render.image_settings.color_mode = 'RGBA';bpy.context.scene.render.image_settings.color_depth = '8';bpy.context.scene.render.image_settings.compression = 0\"",
-                "high": "--python-expr \"import bpy; bpy.context.scene.render.resolution_x = 1920; bpy.context.scene.render.resolution_y = 1120;bpy.context.scene.render.image_settings.color_mode = 'RGBA';bpy.context.scene.render.image_settings.color_depth = '8';bpy.context.scene.render.image_settings.compression = 0\"",
-            }
-
-            # Check if the size is in the mapping, and get the corresponding python_expr
-            if self.size in size_expr_mapping:
-                python_expr = size_expr_mapping[self.size]
-                args.insert(3, python_expr)
-            else:
-                print("Unknown size:", self.size)
 
         try:
             print(' '.join(args))
