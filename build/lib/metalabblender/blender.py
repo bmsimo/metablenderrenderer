@@ -21,11 +21,9 @@ class Blender:
     audio = None
     logEnable = None
     blenderInstallPath = None
-    pythonExpression = None
-    size = None
 
     def __init__(self, blenderFilePath, isFileUrl, outputPath, blenderVersion, isBlenderUrl, fileFormat,
-                 renderEngine, startFrame, endFrame, renderer, animation, audio, logEnable, token, pythonExpression, size):
+                 renderEngine, startFrame, endFrame, renderer, animation, audio, logEnable, token):
         self.token = token
         self.blenderFilePath = blenderFilePath
         self.isFileUrl = isFileUrl
