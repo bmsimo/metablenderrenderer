@@ -86,35 +86,35 @@ class Blender:
                         "-b", self.blenderFilePath,
                         "--python-expr",
                         python_expr,
-                        "--cycles-device", self.renderer,
                         "-E", self.renderEngine,
                         "-o", self.outputPath,
                         "-F", self.fileFormat,
-                        "-a"
+                        "-a",
+                        "--cycles-device", self.renderer,
                         ]
             else:
                 args = [blender_binary,
                         "-b", self.blenderFilePath,
                         "--python-expr",
                         python_expr,
-                        "--cycles-device", self.renderer,
                         "-E", self.renderEngine,
                         "-o", self.outputPath,
                         "-s", str(self.startFrame),
                         "-e", str(self.endFrame),
                         "-F", self.fileFormat,
-                        "-a"
+                        "-a",
+                        "--cycles-device", self.renderer,
                         ]
         else:
             args = [blender_binary,
                     "-b", self.blenderFilePath,
                     "--python-expr",
                     python_expr,
-                    "--cycles-device", self.renderer,
                     "-E", self.renderEngine,
                     "-o", self.outputPath,
                     "-f", str(self.startFrame),
-                    "-F", self.fileFormat
+                    "-F", self.fileFormat,
+                    "--cycles-device", self.renderer,
                     ]
 
         if (self.audio == False):
