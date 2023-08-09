@@ -58,14 +58,8 @@ class Blender:
         # Blender.set_renderer(self)
         Blender.gpu_setup()
         ldpreload.preload()
-
-        # Check if blender binary is already installed
-        blender_binary = './'+self.blenderInstallPath+"/blender"
-        if os.path.isfile(blender_binary):
-            print("Blender binary already installed")
-        else:
-            self.blenderInstallPath = setupblender.setup(
-                self.blenderVersion, self.isBlenderUrl)
+        self.blenderInstallPath = setupblender.setup(
+            self.blenderVersion, self.isBlenderUrl)
         if (self.isFileUrl == True):
             self.blenderFilePath = filedownload.download_from_url(
                 self.blenderFilePath)
@@ -124,6 +118,8 @@ class Blender:
             # Check if the size is in the mapping, and get the corresponding python_expr
             if self.size in size_expr_mapping:
                 python_expr = size_expr_mapping[self.size]
+                print("Size X: " + self.resolution_x)
+                print("Size Y: " + self.resolution_y)
                 args.extend([python_expr])
             else:
                 print("Unknown size:", self.size)
