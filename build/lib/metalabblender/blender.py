@@ -40,8 +40,6 @@ class Blender:
         self.animation = animation
         self.audio = audio
         self.logEnable = logEnable
-        self.pythonExpression = pythonExpression
-        self.size = size
 
     def gpu_setup():
         gpu = subprocess.run(["nvidia-smi", "--query-gpu=gpu_name", "--format=csv,noheader"],
@@ -70,51 +68,33 @@ class Blender:
         print("starting to process blender...")
         blender_binary = './'+self.blenderInstallPath+"/blender"
 
-        size_expr_mapping = {
-            "small":  "\"import bpy; bpy.context.scene.render.resolution_x = 480; bpy.context.scene.render.resolution_y = 270;bpy.context.scene.render.image_settings.color_mode = 'RGBA';bpy.context.scene.render.image_settings.color_depth = '8';bpy.context.scene.render.image_settings.compression = 0\"",
-            "medium": "\"import bpy; bpy.context.scene.render.resolution_x = 960; bpy.context.scene.render.resolution_y = 560;bpy.context.scene.render.image_settings.color_mode = 'RGBA';bpy.context.scene.render.image_settings.color_depth = '8';bpy.context.scene.render.image_settings.compression = 0\"",
-            "high":   "\"import bpy; bpy.context.scene.render.resolution_x = 1920; bpy.context.scene.render.resolution_y = 1120;bpy.context.scene.render.image_settings.color_mode = 'RGBA';bpy.context.scene.render.image_settings.color_depth = '8';bpy.context.scene.render.image_settings.compression = 0\"",
-        }
-
-        # Check if the size is in the mapping, and get the corresponding python_expr
-        if self.size in size_expr_mapping:
-            python_expr = size_expr_mapping[self.size]
-
         if (self.animation):
             if self.startFrame == self.endFrame:
                 args = [blender_binary,
                         "-b", self.blenderFilePath,
-                        "--python-expr",
-                        python_expr,
                         "-E", self.renderEngine,
                         "-o", self.outputPath,
                         "-F", self.fileFormat,
-                        "-a",
-                        "--cycles-device", self.renderer,
+                        "-a", "--", "--cycles-device", self.renderer
                         ]
             else:
                 args = [blender_binary,
                         "-b", self.blenderFilePath,
-                        "--python-expr",
-                        python_expr,
                         "-E", self.renderEngine,
                         "-o", self.outputPath,
                         "-s", str(self.startFrame),
                         "-e", str(self.endFrame),
                         "-F", self.fileFormat,
-                        "-a",
-                        "--cycles-device", self.renderer,
+                        "-a", "--", "--cycles-device", self.renderer
                         ]
         else:
             args = [blender_binary,
                     "-b", self.blenderFilePath,
-                    "--python-expr",
-                    python_expr,
                     "-E", self.renderEngine,
                     "-o", self.outputPath,
-                    "-f", str(self.startFrame),
                     "-F", self.fileFormat,
-                    "--cycles-device", self.renderer,
+                    "-f", str(self.startFrame),
+                    "--", "--cycles-device", self.renderer
                     ]
 
         if (self.audio == False):
