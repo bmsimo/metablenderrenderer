@@ -118,8 +118,6 @@ class Blender:
             # Check if the size is in the mapping, and get the corresponding python_expr
             if self.size in size_expr_mapping:
                 python_expr = size_expr_mapping[self.size]
-                print("Size X: " + self.resolution_x)
-                print("Size Y: " + self.resolution_y)
                 args.extend([python_expr])
             else:
                 print("Unknown size:", self.size)
