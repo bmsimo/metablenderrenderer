@@ -22,7 +22,7 @@ class Blender:
     logEnable = None
     blenderInstallPath = None
     pythonExpression = None
-    size: None
+    size = None
 
     def __init__(self, blenderFilePath, isFileUrl, outputPath, blenderVersion, isBlenderUrl, fileFormat,
                  renderEngine, startFrame, endFrame, renderer, animation, audio, logEnable, token, pythonExpression, size):
